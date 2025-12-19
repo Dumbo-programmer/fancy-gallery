@@ -89,7 +89,6 @@ body{
   pointer-events:none;
 }
 
-/* fall uses a CSS variable --sway (px) set per-heart to apply horizontal drift */
 @keyframes fall {
   0%{transform: translateX(0px) translateY(0vh) rotate(0deg) scale(1); opacity:0}
   8%{opacity:1}

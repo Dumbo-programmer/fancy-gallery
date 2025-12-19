@@ -1,4 +1,3 @@
-// Gallery script: fading image slideshow + looping video strip
 
 const imageNames = [
   'images/1.jpg','images/2.jpg','images/3.jpg','images/4.jpg',
@@ -10,7 +9,6 @@ const videoNames = ['videos/1.mp4','videos/2.mp4','videos/3.mp4','videos/4.mp4']
 const slideshowEl = document.getElementById('slideshow');
 const videoStripTrack = document.getElementById('videoStrip');
 
-// Preload images and keep only the ones that load successfully
 async function preloadImage(src){
   return new Promise(resolve => {
     const img = new Image();
@@ -26,7 +24,6 @@ async function preloadVideo(src){
     v.onloadeddata = () => resolve(src);
     v.onerror = () => resolve(null);
     v.src = src;
-    // do not call load() aggressively
   });
 }
 
@@ -63,11 +60,8 @@ function setupSlideshow(images){
     idx = (idx+1)%slides.length;
     slides[idx].classList.add('active');
   };
-  // fade interval
   setInterval(showNext, 1500);
 }
-
-// Video strip (carousel that loops, videos autoplay loop muted)
 function setupVideoStrip(videos){
   if(!videos.length){
     videoStripTrack.innerHTML = '<div style="color:#999">No videos found in /videos</div>';
@@ -88,25 +82,20 @@ function setupVideoStrip(videos){
     card.appendChild(v);
     videoStripTrack.appendChild(card);
   });
-
-  // Clone nodes to create an infinite seamless strip
   const originalCount = videoStripTrack.children.length;
   for(let i=0;i<originalCount;i++){
     const clone = videoStripTrack.children[i].cloneNode(true);
-    // ensure cloned video elements keep playing
     const cv = clone.querySelector('video');
     if(cv){ cv.autoplay = true; cv.loop = true; cv.muted = true; cv.playsInline = true; }
     videoStripTrack.appendChild(clone);
   }
 
-  const gap = 18; // must match CSS
+  const gap = 18;
   let cardWidth = videoStripTrack.children[0].getBoundingClientRect().width;
   let totalOriginalWidth = (cardWidth * originalCount) + (gap * (originalCount - 1));
 
-  // continuous animation using translateX; move left continuously and reset when we've moved past original width
   let offset = 0;
-  const speed = 0.6; // px per frame, increase for faster motion
-
+  const speed = 0.6;
   function step(){
     offset -= speed;
     if(Math.abs(offset) >= totalOriginalWidth){
@@ -184,8 +173,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
     }
   });
 });
-
-// Falling hearts
 let heartInterval = null;
 function startHearts(){
   const container = document.getElementById('heartFall');
@@ -203,7 +190,6 @@ function createHeart(container){
   heart.innerText = '❤';
   const size = 8 + Math.random()*14; // base random size
   heart.style.fontSize = `${size + 10}px`;
-  // spawn somewhere across the width (avoid extreme edges)
   const left = 6 + Math.random()*88; // percent
   heart.style.left = `${left}%`;
   const duration = 3200 + Math.random()*2200; // ms overall fall duration
